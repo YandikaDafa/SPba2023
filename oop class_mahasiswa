@@ -1,0 +1,69 @@
+<?php
+include "database_class.php";
+class mahasisa extends database
+{
+
+    function __construct()
+    {
+        parent::__construct();
+    }
+    function getMahasiswa()
+    {
+        $qry = mysqli_query($this->con, "SELECT * FROM mahasisa");
+        while($datas = mysqli_fetch_assoc($qry)){
+            $data[] = $datas;
+        }
+        return $data;
+    }
+    function insertMahasisa($data)
+    {
+        $qry = mysqli_query($this->con, "INSERT INTO mahasisa VALUES (
+            '". $data['nim']."',
+            '". $data['nama']."',
+            '". $data['kode_jurusan']."',
+            '". $data['gender']."',
+            '". $data['no_hp']."',
+            '". $data['alamat']."',
+            '". $data['email']."',
+            '". $data['nama_foto']."'
+        )");
+
+        return $qry;
+    }
+
+    function updateMahasisa($data){
+        extract($data);
+
+        if (isset($_POST["simpan"])) 
+        if(empty($_FILES['foto']['name'])){
+        $qry= mysqli_query($this->con,"UPDATE mahasisa SET
+            nama_mhs = '$nama',
+            kode_jurusan = '$kode_jurusan',
+            gender = '$gender',
+            no_hp = '$no_hp',
+            alamat = '$alamat',
+            email = '$email',
+            nama_foto = '$nama_foto'
+            WHERE nim = '$nim'");
+    }else {
+        $qry= mysqli_query($this->con,"UPDATE mahasisa SET
+            nama_mhs = '$nama',
+            kode_jurusan = '$kode_jurusan',
+            gender = '$gender',
+            no_hp = '$no_hp',
+            alamat = '$alamat',
+            email = '$email'
+            WHERE nim = '$nim'");
+        }
+    return $qry;
+    }
+
+    function deleteMahasisa($nim)
+    {
+        $qry = mysqli_query($this->con,"DELETE FROM mahasisa WHERE nim = '$nim'");
+        return $qry;
+    }
+}    
+
+$mhs=new mahasisa;
+?>
