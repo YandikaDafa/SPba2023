@@ -1,0 +1,63 @@
+<?php
+include "class/mahasiswa_class.php";
+
+if (isset($_POST["simpan"])) {
+    $nim = $_POST['nim'];
+    $nama = $_POST['nama'];
+    $kode_jurusan = $_POST['jurusan'];
+    $gender = $_POST['gender'];
+    $no_hp = $_POST['no_hp'];
+    $alamat = $_POST['alamat'];
+    $email = $_POST['email'];
+    //$nama_foto = $_FILES['foto'];
+
+    
+
+    if(isset($_FILES['foto']['name'])){
+        $target_dir = "uploadjpg/";
+        $target_file = $target_dir . basename($_FILES["foto"]["name"]);
+        $nama_foto = basename($_FILES["foto"]["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+        move_uploaded_file($_FILES["foto"]["tmp_name"], $target_file);
+
+        $qry = "UPDATE mahasisa SET
+            nama_mhs = '$nama',
+            kode_jurusan = '$kode_jurusan',
+            gender = '$gender',
+            no_hp = '$no_hp',
+            alamat = '$alamat',
+            email = '$email',
+            WHERE nim = '$nim'";
+    } else {
+        $qry = "UPDATE mahasisa SET
+            nama_mhs = '$nama',
+            kode_jurusan = '$kode_jurusan',
+            gender = '$gender',
+            no_hp = '$no_hp',
+            alamat = '$alamat',
+            email = '$email',
+            nama_foto = '$nama_foto'
+            WHERE nim = '$nim'";
+    }
+    
+
+    $data = [
+        'nim' => $nim,
+        'nama' => $nama,
+        'kode_jurusan' => $kode_jurusan,
+        'gender' => $gender,
+        'no_hp' => $no_hp,
+        'alamat' => $alamat,
+        'email' => $email,
+        'nama_foto' => $nama_foto
+      ];
+
+    $exec = $mhs->updateMahasisa($data);
+    if ($exec) {
+        echo "<script>alert('Data berhasil disimpan'); window.location='home.php';</script>";
+    } else {
+        echo "<script>alert('Data gagal disimpan'); window.location='home.php';</script>";
+    }
+} 
+?>
